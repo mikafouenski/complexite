@@ -1,25 +1,37 @@
-#include <stdio.h>
-#include <limits.h>
+#include "utils.c"
 
 int main(int argc, char const *argv[])
 {
-    int t[100];
-    int somme = 0;
-    int start = 0, end = 100, sommeMax = INT_MIN;
-    int start_max = 0, end_max = 100;
+    int tailleT = argc-1;
+    int * t = generateTab( tailleT, 0);
 
-    for (int i = 0; i < 100; ++i) {
-        for (int j = end; j >= start; --j) {
-            for (int k = i; k <= j; ++k) {
-                somme = somme + t[k];
-            }
-            if (sommeMax < somme) {
-                sommeMax = somme;
+    for(int i=0; i<tailleT; ++i)
+        t[i] = atoi(argv[i+1]);
+
+
+    int somme;
+    int sommeMax = t[0];
+    int start_max = 0;
+    int end_max = 0;
+    
+
+    for( int i=0; i< tailleT; ++i) {
+        for(int j=i; j<tailleT; ++j) {
+            somme = 0;
+            for(int k=i; k<=j; ++k)
+                somme += t[k];
+            if(somme > sommeMax) {
                 start_max = i;
                 end_max = j;
+                sommeMax = somme;
             }
         }
     }
-    printf("[%d:%d]\n", start_max, end_max);
+
+
+    printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
+
+    free(t);
+
     return 0;
 }

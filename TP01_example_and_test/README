@@ -1,0 +1,23 @@
+################
+## Example of correct answers
+################
+
+TP1_exemples.txt: a set of example tabulars with correct answers, to manually test your program on given examples.
+
+################
+## Test a new program from a correct program
+################
+
+There is a script to produce new tabulars and compare two programs.
+
+compare_two_programs_on_a_set_of_20_examples.sh: automatically compare two programs on a set of 20 examples.
+
+Example usage for executables "./toto" and "./tata":
+./compare_two_programs_on_a_set_of_20_examples.sh "./toto" "./tata"
+
+IMPORTANT: you have to respect the two following conventions:
+
+1. the executables are such that "./txtx 98 -30 ... 42" runs program txtx (x equals o or a) on the tabular 98 -30 ... 42
+
+2. your program should print only the two bounds of the interval, separated with a space
+

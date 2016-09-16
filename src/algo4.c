@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
         if(somme + t[i] >= 0)
             somme += t[i];
         else {
-            somme = t[i];
+            somme = t[++i];
             start = i;
         }
 

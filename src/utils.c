@@ -14,3 +14,12 @@ int * generateTab( int size, int init) {
     else
         return (int*)malloc(size * sizeof( int ) );
 }
+
+int * loadTab( int tailleT, char const *argv[]) {
+    int * t = generateTab( tailleT, 0);
+
+    for(int i=0; i<tailleT; ++i)
+        t[i] = atoi(argv[i+1]);
+
+    return t;
+}

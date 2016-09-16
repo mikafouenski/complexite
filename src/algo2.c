@@ -3,17 +3,12 @@
 int main(int argc, char const *argv[])
 {
     int tailleT = argc-1;
-    int * t = generateTab( tailleT, 0);
-
-    for(int i=0; i<tailleT; ++i)
-        t[i] = atoi(argv[i+1]);
-
+    int * t = loadTab( tailleT, argv);
 
     int somme;
     int sommeMax = t[0];
     int start_max = 0;
     int end_max = 0;
-    
 
     for( int i=0; i< tailleT; ++i) {
         somme = 0;
@@ -26,7 +21,6 @@ int main(int argc, char const *argv[])
             }
         }
     }
-
 
     printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
 

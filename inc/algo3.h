@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <limits.h>
-#include "utils.c"
-
 int maxCrossingSum(int * t, int *head, int med, int *tail) {
     int sum = 0, left_sum = INT_MIN, max_left = med;
     for (int i = med; i >= *head; --i) {
@@ -55,17 +51,8 @@ int maxSubArraySum(int * t, int *head, int *tail) {
     }
 }
 
-int main(int argc, char const *argv[]) {
-    int n = argc-1;
-    int * t = loadTab(n, argv);
-
-    int somme_max, start_max = 0, end_max = n - 1;
-
-    somme_max = maxSubArraySum(t, &start_max, &end_max);
-
-    free(t);
-
-    printf("%d[%d:%d]\n", somme_max, start_max, end_max);
-
-    return 0;
+int algo3 (int * t, int n, int *start_max, int *end_max) {
+    *start_max = 0;
+    *end_max = n - 1;
+    return maxSubArraySum(t, start_max, end_max);
 }

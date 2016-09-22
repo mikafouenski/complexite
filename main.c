@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "algo1.h"
 #include "algo2.h"
@@ -106,37 +107,78 @@ void traitement_fils(int* sizes, int algo) {
     free(array);
 }
 
-int main(/*int argc, char const *argv[]*/) {
-
-    // int start_max, end_max, sommeMax;
-    // int n = argc-1;
-    // int * t = (int*)malloc(n * sizeof( int ) );
-    // for(int i=0; i<n; ++i)
-    //     t[i] = atoi(argv[i+1]);
-
-    // sommeMax = algo1(t, n, &start_max, &end_max);
-    // printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
-    // sommeMax = algo2(t, n, &start_max, &end_max);
-    // printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
-    // sommeMax = algo3(t, n, &start_max, &end_max);
-    // printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
-    // sommeMax = algo4(t, n, &start_max, &end_max);
-    // printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
-
-    // free(t);
-
-    int i, status = 0, wpid, fils;
-
-    for (i = 0; i < 4; ++i) {
-        /* 4 algos */
-        fils = fork();
-        if (fils == 0) {
-            traitement_fils(sizes, i);
-            exit(0);
+int main(int argc, char **argv) {
+    int aflag = 0, bflag = 0, cflag = 0, dflag = 0, tflag = 0, c, cpt = 1;
+    opterr = 0;
+    while ((c = getopt(argc, argv, "abcdth")) !=  -1) {
+        switch (c) {
+            case 'a':
+                aflag = 1;
+                cpt++;
+                break;
+            case 'b':
+                bflag = 1;
+                cpt++;
+                break;
+            case 'c':
+                cflag = 1;
+                cpt++;
+                break;
+            case 'd':
+                dflag = 1;
+                cpt++;
+                break;
+            case 't':
+                tflag = 1;
+                cpt++;
+                break;
+            case 'h':
+                printf("Usage: main [OPTION]... tableau...\n");
+                printf("Sans option l'algorithme 4 en O(n) est utilisé\n");
+                printf("Option:\n");
+                printf("  -a algorithme A [ABCD] -> [-a, -b, -c, -d]\n");
+                printf("  -t programme de test\n");
+                return 0;
+            case '?':
+                break;
+            default:
+                abort();
         }
     }
 
-    while ((wpid = wait(&status)) > 0);
+    if (tflag) {
+        int i, status = 0, wpid, fils;
+        for (i = 0; i < 4; ++i) {
+            /* 4 algos */
+            fils = fork();
+            if (fils == 0) {
+                traitement_fils(sizes, i);
+                exit(0);
+            }
+        }
+        while ((wpid = wait(&status)) > 0);
+        return 0;
+    }
 
-    return 0;
+    int start_max, end_max, sommeMax;
+    int n = argc - cpt;
+    int * t = (int*)malloc(n * sizeof(int));
+    for (int i = 0; i < n; ++i) {
+        t[i] = atoi(argv[cpt]);
+        ++cpt;
+    }
+    if (aflag) {
+        sommeMax = algo1(t, n, &start_max, &end_max);
+    } else if (bflag) {
+        sommeMax = algo2(t, n, &start_max, &end_max);
+    } else if (cflag) {
+        sommeMax = algo3(t, n, &start_max, &end_max);
+    } else if (dflag) {
+        sommeMax = algo4(t, n, &start_max, &end_max);
+    } else {
+        sommeMax = algo4(t, n, &start_max, &end_max);
+    }
+
+    printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
+    free(t);
 }

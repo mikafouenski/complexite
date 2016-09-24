@@ -1,15 +1,19 @@
-CC     = gcc
-CFLAGS = -Wall -W -std=c99 -pedantic -Iinc -g3
+CC = gcc
+CCFLAGS = -Wall -std=c99 -Iinc -g3
 
-EXECS = main
+SRC = $(wildcard src/*.c)
+OBJ = $(SRC:.c=.o)
 
-.c.o :
-	$(CC) -c $(CFLAGS) $*.c
+EXEC = main
 
-all :: $(EXECS)
+all: $(EXEC)
 
-$(EXECS) : %: %.o
-	$(CC) -o $@ $@.o
+$(EXEC): $(OBJ)
+	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
-clean ::
-	\rm -f *.o $(EXECS)
+%.o: %.c
+	$(CC) $(CCFLAGS) -o $@ -c $<
+
+clean:
+	rm -fv src/*.o
+	rm -fv $(EXEC)

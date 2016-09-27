@@ -4,7 +4,7 @@
 #include "algo4.h"
 #include "utils.h"
 
-#define nb_sizes 8
+#define nb_sizes 7
 
 int sizes[nb_sizes] = {100, 500, 1000, 10000, 100000, 1000000, 10000000};
 typedef int(*Functions[4])(int*,int, int*, int*);

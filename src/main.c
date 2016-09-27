@@ -4,13 +4,11 @@
 #include "algo4.h"
 #include "utils.h"
 
-int sizes[7] = {100, 500, 5000, 10000, 100000, 500000, 1000000};
+#define nb_sizes 8
+
+int sizes[nb_sizes] = {100, 500, 1000, 10000, 100000, 1000000, 10000000};
 typedef int(*Functions[4])(int*,int, int*, int*);
 Functions algos = {algo1, algo2, algo3, algo4};
-typedef struct tms sTms;
-typedef struct{
-    sTms sdebut, sfin;
-}temps_exec;
 
 void random_perso(int* t, int n) {
     for(int i = 0 ; i < n ; ++i)
@@ -23,16 +21,16 @@ void capt_alarm(int sig) {
 }
 
 void son (int * t, int n, int algo) {
+    clock_t debut, fin;
     signal(SIGALRM, capt_alarm);
     alarm(60);
-    temps_exec temps;
     int start_max, end_max, sommeMax;
-    times(&temps.sdebut); //debut
+    debut = clock();
     sommeMax = (algos[algo])(t, sizes[n], &start_max, &end_max);
-    times(&temps.sfin);
-    int exec = (temps.sfin.tms_utime - temps.sdebut.tms_utime) * 10;
-    printf("Algo%d, taille:%d temps:%d\n", algo + 1, sizes[n], exec);
-    printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
+    fin = clock();
+    double exec = (double) (fin - debut) / CLOCKS_PER_SEC;
+    printf("Algo%d, taille:%d temps:%0.6lf\n", algo + 1, sizes[n], exec);
+    //printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
 }
 
 int main(int argc, char **argv) {
@@ -65,7 +63,7 @@ int main(int argc, char **argv) {
     if (flag_t) {
         srand(time(0));
         int *t;
-        for (int i = 0; i < 7; ++i) { //tailles
+        for (int i = 0; i < nb_sizes; ++i) {
             t = (int*)malloc(sizes[i] * sizeof(int));
             random_perso(t, sizes[i]);
             int status = 0, wpid, fils;

@@ -4,11 +4,15 @@
 #include "algo4.h"
 #include "utils.h"
 
-#define nb_sizes 7
+#define nb_sizes 8
 
-int sizes[nb_sizes] = {100, 500, 1000, 10000, 100000, 1000000, 10000000};
+int sizes[nb_sizes] = {100, 500, 1000, 10000, 100000, 1000000, 10000000, 100000000};
 typedef int(*Functions[4])(int*,int, int*, int*);
 Functions algos = {algo1, algo2, algo3, algo4};
+
+int sonNumber;
+int sonSizeTest;
+int debug = 0;
 
 void random_perso(int* t, int n) {
     for(int i = 0 ; i < n ; ++i)
@@ -16,12 +20,14 @@ void random_perso(int* t, int n) {
 }
 
 void capt_alarm(int sig) {
-    printf("Timeout\n");
-    return;
+    printf("Algo%d, taille:%d temps:>60.000000\n", sonNumber + 1, sizes[sonSizeTest]);
+    exit(0);
 }
 
 void son (int * t, int n, int algo) {
     clock_t debut, fin;
+    sonNumber = algo;
+    sonSizeTest = n;
     signal(SIGALRM, capt_alarm);
     alarm(60);
     int start_max, end_max, sommeMax;
@@ -30,7 +36,8 @@ void son (int * t, int n, int algo) {
     fin = clock();
     double exec = (double) (fin - debut) / CLOCKS_PER_SEC;
     printf("Algo%d, taille:%d temps:%0.6lf\n", algo + 1, sizes[n], exec);
-    //printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
+    if(debug)
+        printf("%d[%d:%d]\n", sommeMax, start_max, end_max);
 }
 
 int main(int argc, char **argv) {
